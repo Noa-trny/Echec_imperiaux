@@ -1,7 +1,7 @@
 import tkinter as tk
 
 class Jeu:
-    def __init__(self, n,joueur):
+    def __init__(self, n,joueur = 1):
         self.n = n
         self.tableau = self.create_plateau()
         self.joueur = joueur
@@ -112,6 +112,6 @@ class Jeu:
         
         
 
-jeu = Jeu(8,1)
+jeu = Jeu(8)
 jeu.UI()
 
