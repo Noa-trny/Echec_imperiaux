@@ -1,48 +1,44 @@
 import tkinter as tk
-from tkinter import messagebox
-
-class joueur:
+class Joueur:
     coordonnees_reine = []
     nbr_pions = 0
-
-    def __init__(self, coordonnees_reine, nbr_pions):
+    def __init__(self,coordonnees_reine,nbr_pions):
         self.coordonnees_reine = coordonnees_reine
         self.nbr_pions = nbr_pions
-    
-    
-
 
 class Jeu:
     def __init__(self, n):
         self.n = n
-        self.plateau = [] 
-        self.joueur1 = joueur([0,n-1], n**2 // 4)
-        self.joueur2 = joueur([n-1,0], n**2 // 4)
-
+        self.joueur = 1
+        self.tableau = self.create_plateau()
+        self.joueur1 =Joueur([0,n],n**2 // 4)
+        self.joueur2 =Joueur([n,0],n**2 // 4)
+        
     def create_plateau(self):
-        liste1 = []
-        for i in range(self.n // 2):
-            liste2 = []
+        self.root = tk.Tk()
+        liste1 = []  
+        for i in range(self.n // 2):  
+            liste2 = []  
             for j in range(self.n):
                 if j >= self.n // 2:
                     if i == 0 and j == self.n-1:
-                        btn = tk.Button(self.root, bg="orange", width=4, height=2)
+                        btn = tk.Button(self.root, bg="darkorange2", width=4, height=2, command=lambda i=i, j=j: self.selectedpion(i,j))
                     else:
-                        btn = tk.Button(self.root, bg="red", width=4, height=2)
+                        btn = tk.Button(self.root, bg="red3", width=4, height=2, command=lambda i=i, j=j: self.selectedpion(i,j))
                 else:
                     btn = tk.Button(self.root, bg="white", width=4, height=2)
                 btn.grid(row=i, column=j)
                 liste2.append(btn)
             liste1.append(liste2)
 
-        for i in range(self.n // 2, self.n):
+        for i in range(self.n // 2, self.n):  
             liste2 = []
             for j in range(self.n):
                 if j < self.n // 2:
                     if i == self.n - 1 and j == 0:
-                        btn = tk.Button(self.root, bg="purple", width=4, height=2)
+                        btn = tk.Button(self.root, bg="purple2", width=4, height=2, command=lambda i=i, j=j: self.selectedpion(i,j))
                     else:
-                        btn = tk.Button(self.root, bg="blue", width=4, height=2)
+                        btn = tk.Button(self.root, bg="blue3", width=4, height=2, command=lambda i=i, j=j: self.selectedpion(i,j))
                 else:
                     btn = tk.Button(self.root, bg="white", width=4, height=2)
                 btn.grid(row=i, column=j)
@@ -50,104 +46,88 @@ class Jeu:
             liste1.append(liste2)
 
         return liste1
-    
+
     def UI(self):
-        self.root = tk.Tk()
         self.root.title("Game")
-        self.label_joueur = tk.Label(self.root, text="Joueur 1")
+        self.tableau
+
+        self.label_joueur = tk.Label(self.root, text="Joueur: " + str(self.joueur))
         self.label_joueur.grid(row=self.n, columnspan=self.n)
-        self.label_nbr_pions = tk.Label(self.root, text="Nombre de pions : " + str(self.joueur1.nbr_pions))
-        self.create_plateau()
+        
         self.root.mainloop()
+    def possible(self,i,j):
 
-
-        
-    def selectedpion(self, i, j):
-    
-        self.tableau[i][j].config(bg='green')
-
-        
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-        for di, dj in directions:
-            k = 1
-            while True:
-                ni, nj = i + k * di, j + k * dj
-            
-                if 0 <= ni < self.n and 0 <= nj < self.n:
-            
-                    if self.tableau[ni][nj].cget("bg") == 'white':
-                        self.tableau[ni][nj].config(bg='brown')
-                        k += 1
-                    else:
-                        break  
-                else:
-                    break 
-
-    def move(self,ancieni,ancienj,i,j):
-        self.tableau[ancieni][ancienj].config(bg='white')
-        self.tableau[i][j].config(bg='red' or 'blue')
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-        for di, dj in directions:
-            k = 1
-            while True:
-                ni, nj = i + k * di, j + k * dj
-            
-                if 0 <= ni < self.n and 0 <= nj < self.n:
-            
-                    if self.tableau[ni][nj].cget("bg") == 'brown':
-                        self.tableau[ni][nj].config(bg='white',command=lambda ancieni=i,ancienj=j,i=ni,j=nj: self.move(ancieni,ancienj,i,j))
-                        k += 1
-                    else:
-                        break  
-                else:
-                    break 
-    
-    def reine_move(self,ancieni,ancienj,i,j):
-        self.tableau[ancieni][ancienj].config(bg='white')
-        self.tableau[i][j].config(bg='purple' or 'orange')
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
-        for di, dj in directions:
-            k = 1
-            while True:
-                ni, nj = i + k * di, j + k * dj
-            
-                if 0 <= ni < self.n and 0 <= nj < self.n:
-            
-                    if self.tableau[ni][nj].cget("bg") == 'brown':
-                        self.tableau[ni][nj].config(bg='white',command=lambda ancieni=i,ancienj=j,i=ni,j=nj: self.reine_move(ancieni,ancienj,i,j))
-                        k += 1
-                    else:
-                        break  
-                else:
-                    break
-
-    def nombre_pions(self,joueur):
-        for i in range(self.n):
-            for j in range(self.n):
-                if self.plateau[i][j].cget('bg') != 'white':
-                    joueur.nbr_pions += 1
-        return joueur.nbr_pions
-    
-    
-
-
-
-    def update(self):
-        pass
-
-
-    def possible(self):
-        pass
-
-    def again(self):
-        return True
-    
-    def est_gagnant(self):
-        if joueur.nbr_pions <= 2:
+        if self.joueur == 1 and (self.tableau[i][j].cget('bg') == "red3" or self.tableau[i][j].cget('bg') == "darkorange2"):
             return True
+        elif self.joueur == 2 and ( self.tableau[i][j].cget('bg')=='blue3' or self.tableau[i][j].cget('bg')=='purple2') :
+            return True
+        else:
+            return False
 
-    
+    def selectedpion(self, i, j):
+        
+        if self.possible(i,j):
+            if self.joueur == 1:
+                if self.tableau[i][j].cget('bg')== "darkorange2":
+                    self.tableau[i][j].config(bg='darkorange4')
+                    directions = [(-1, 0),(-1,-1), (1, 0), (1,1),(1,-1),(-1,1),(0, -1), (0, 1)]
+                else:
+                    self.tableau[i][j].config(bg='red3')
+                    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+            else:
+                if self.tableau[i][j].cget('bg')== "purple2":
+                    self.tableau[i][j].config(bg='purple4')
+                    directions = [(-1, 0),(-1,-1) ,(1, 0), (1,1),(1,-1),(-1,1),(0, -1), (0, 1)]
+                else:
 
+                    self.tableau[i][j].config(bg='blue4')
+                    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
-jeu = Jeu(10)
+            
+            for di, dj in directions:
+                k = 1
+                while True:
+                    ni, nj = i + k * di, j + k * dj
+                
+                    if 0 <= ni < self.n and 0 <= nj < self.n:
+                        if self.tableau[ni][nj].cget("bg") == 'white':
+                            if self.joueur == 1:
+                                self.tableau[ni][nj].config(bg='red', command=lambda ancieni=i, ancienj=j, i=ni, j=nj: self.move(ancieni, ancienj, i, j))
+                            else:
+                                self.tableau[ni][nj].config(bg='blue', command=lambda ancieni=i, ancienj=j, i=ni, j=nj: self.move(ancieni, ancienj, i, j))
+                            k += 1
+                        else:
+                            break  
+                    else:
+                        break 
+
+    def move(self, ancieni, ancienj, i, j):
+        if self.joueur == 1:
+            if self.tableau[ancieni][ancienj].cget('bg')== "darkorange4":
+                    self.tableau[i][j].config(bg='darkorange2',command = lambda i=i, j=j: self.selectedpion(i,j))
+            else:
+                self.tableau[i][j].config(bg='red3',command = lambda i=i, j=j: self.selectedpion(i,j))
+        else:
+            if self.tableau[ancieni][ancienj].cget('bg')== "purple4":
+                self.tableau[i][j].config(bg='purple2',command = lambda i=i, j=j: self.selectedpion(i,j))
+            else:
+                self.tableau[i][j].config(bg='blue3',command = lambda i=i, j=j: self.selectedpion(i,j))
+        self.tableau[ancieni][ancienj].config(bg='white',command = lambda:self.inutile())
+
+     
+        for i in range(len(self.tableau)):
+            for j in range(len(self.tableau)):
+                if self.tableau[i][j].cget('bg') =='red' or self.tableau[i][j].cget('bg') =='blue':
+                    self.tableau[i][j].config(bg='white',command = lambda:self.inutile())
+      
+        if self.joueur == 1:
+            self.joueur = 2
+        else:
+            self.joueur = 1
+        self.label_joueur.config(text="Joueur: " + str(self.joueur))
+
+    def inutile(self):
+        return
+
+jeu = Jeu(6)
 jeu.UI()
