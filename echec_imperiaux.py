@@ -47,30 +47,36 @@ class Jeu:
         self.label_joueur.grid(row=self.n, columnspan=self.n)
         
         self.root.mainloop()
+    def possible(self,i,j):
+        if (self.joueur == 1 and self.tableau[i][j].cget('bg') == "red3") or (self.joueur == 2 and self.tableau[i][j].cget('bg')=='blue3'):
+            return True
+        else:
+            return False
 
     def selectedpion(self, i, j):
-        if self.joueur == 1:
-            self.tableau[i][j].config(bg='red3')
-        else:
-            self.tableau[i][j].config(bg='blue4')
+        if self.possible(i,j):
+            if self.joueur == 1:
+                self.tableau[i][j].config(bg='red3')
+            else:
+                self.tableau[i][j].config(bg='blue4')
 
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-        for di, dj in directions:
-            k = 1
-            while True:
-                ni, nj = i + k * di, j + k * dj
-            
-                if 0 <= ni < self.n and 0 <= nj < self.n:
-                    if self.tableau[ni][nj].cget("bg") == 'white':
-                        if self.joueur == 1:
-                            self.tableau[ni][nj].config(bg='red', command=lambda ancieni=i, ancienj=j, i=ni, j=nj: self.move(ancieni, ancienj, i, j))
+            directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+            for di, dj in directions:
+                k = 1
+                while True:
+                    ni, nj = i + k * di, j + k * dj
+                
+                    if 0 <= ni < self.n and 0 <= nj < self.n:
+                        if self.tableau[ni][nj].cget("bg") == 'white':
+                            if self.joueur == 1:
+                                self.tableau[ni][nj].config(bg='red', command=lambda ancieni=i, ancienj=j, i=ni, j=nj: self.move(ancieni, ancienj, i, j))
+                            else:
+                                self.tableau[ni][nj].config(bg='blue', command=lambda ancieni=i, ancienj=j, i=ni, j=nj: self.move(ancieni, ancienj, i, j))
+                            k += 1
                         else:
-                             self.tableau[ni][nj].config(bg='blue', command=lambda ancieni=i, ancienj=j, i=ni, j=nj: self.move(ancieni, ancienj, i, j))
-                        k += 1
+                            break  
                     else:
-                        break  
-                else:
-                    break 
+                        break 
 
     def move(self, ancieni, ancienj, i, j):
        
