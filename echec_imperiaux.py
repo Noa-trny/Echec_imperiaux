@@ -102,6 +102,10 @@ class Jeu:
                     return True
                 return False
 
+    def update(self):
+        pass
+
+
     def possible(self):
         pass
 
