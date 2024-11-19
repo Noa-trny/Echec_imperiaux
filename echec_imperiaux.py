@@ -1,4 +1,31 @@
 import tkinter as tk
+import tkinter.messagebox
+
+class PreConfig:
+    def __init__(self, default_n):
+        self.root = tk.Tk()
+        self.root.title("Configuration")
+        self.n = tk.IntVar(value=default_n)
+        
+        label = tk.Label(self.root, text="Choisissez la dimension du plateau (pair, entre 6 et 12):")
+        label.pack(pady=10)
+        
+        self.scale = tk.Scale(self.root, from_=6, to=12, orient=tk.HORIZONTAL, variable=self.n)
+        self.scale.pack(pady=10)
+        
+        button = tk.Button(self.root, text="Valider", command=self.validate)
+        button.pack(pady=10)
+        
+        self.root.mainloop()
+    
+    def validate(self):
+        if self.n.get() % 2 == 0:
+            self.root.destroy()
+        else:
+            tk.messagebox.showerror("Erreur", "La dimension doit être un nombre pair.")
+
+
+
 class Joueur:
     coordonnees_reine = []
     nbr_pions = 0
@@ -129,5 +156,7 @@ class Jeu:
     def inutile(self):
         return
 
-jeu = Jeu(6)
-jeu.UI()
+if __name__ == "__main__":
+    preconfig = PreConfig(8)
+    jeu = Jeu(preconfig.n)
+    jeu.UI()
