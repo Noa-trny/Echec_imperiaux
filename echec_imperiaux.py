@@ -1,10 +1,18 @@
 import tkinter as tk
+class Joueur:
+    coordonnees_reine = []
+    nbr_pions = 0
+    def __init__(self,coordonnees_reine,nbr_pions):
+        self.coordonnees_reine = coordonnees_reine
+        self.nbr_pions = nbr_pions
 
 class Jeu:
-    def __init__(self, n, joueur):
+    def __init__(self, n):
         self.n = n
-        self.joueur = joueur
+        self.joueur = 1
         self.tableau = self.create_plateau()
+        self.joueur1 =Joueur([0,n],n**2 // 4)
+        self.joueur2 =Joueur([n,0],n**2 // 4)
         
     def create_plateau(self):
         self.root = tk.Tk()
@@ -98,8 +106,9 @@ class Jeu:
             self.joueur = 2
         else:
             self.joueur = 1
+        self.label_joueur.config(text="Joueur: " + str(self.joueur))
 
 
 
-jeu = Jeu(8, 1)
+jeu = Jeu(8)
 jeu.UI()
