@@ -115,6 +115,8 @@ class Jeu:
     def UI(self):
         self.root = tk.Tk()
         self.root.title("Game")
+        self.label_joueur = tk.Label(self.root, text="Joueur 1")
+        self.label_joueur.grid(row=self.n, columnspan=self.n)
         self.create_plateau()
         self.root.mainloop()
 
