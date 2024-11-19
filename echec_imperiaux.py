@@ -56,19 +56,34 @@ class Jeu:
         
         self.root.mainloop()
     def possible(self,i,j):
-        if (self.joueur == 1 and self.tableau[i][j].cget('bg') == "red3") or (self.joueur == 2 and self.tableau[i][j].cget('bg')=='blue3'):
+
+        if self.joueur == 1 and (self.tableau[i][j].cget('bg') == "red3" or self.tableau[i][j].cget('bg') == "darkorange2"):
+            return True
+        elif self.joueur == 2 and ( self.tableau[i][j].cget('bg')=='blue3' or self.tableau[i][j].cget('bg')=='purple2') :
             return True
         else:
             return False
 
     def selectedpion(self, i, j):
+        
         if self.possible(i,j):
             if self.joueur == 1:
-                self.tableau[i][j].config(bg='red3')
+                if self.tableau[i][j].cget('bg')== "darkorange2":
+                    self.tableau[i][j].config(bg='darkorange4')
+                    directions = [(-1, 0),(-1,-1), (1, 0), (1,1),(1,-1),(-1,1),(0, -1), (0, 1)]
+                else:
+                    self.tableau[i][j].config(bg='red3')
+                    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
             else:
-                self.tableau[i][j].config(bg='blue4')
+                if self.tableau[i][j].cget('bg')== "purple2":
+                    self.tableau[i][j].config(bg='purple4')
+                    directions = [(-1, 0),(-1,-1) ,(1, 0), (1,1),(1,-1),(-1,1),(0, -1), (0, 1)]
+                else:
 
-            directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+                    self.tableau[i][j].config(bg='blue4')
+                    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+            
             for di, dj in directions:
                 k = 1
                 while True:
@@ -87,20 +102,23 @@ class Jeu:
                         break 
 
     def move(self, ancieni, ancienj, i, j):
-       
-        self.tableau[ancieni][ancienj].config(bg='white')
-
-      
         if self.joueur == 1:
-            self.tableau[i][j].config(bg='red3')
+            if self.tableau[ancieni][ancienj].cget('bg')== "darkorange4":
+                    self.tableau[i][j].config(bg='darkorange2',command = lambda i=i, j=j: self.selectedpion(i,j))
+            else:
+                self.tableau[i][j].config(bg='red3',command = lambda i=i, j=j: self.selectedpion(i,j))
         else:
-            self.tableau[i][j].config(bg='blue4')
+            if self.tableau[ancieni][ancienj].cget('bg')== "purple4":
+                self.tableau[i][j].config(bg='purple2',command = lambda i=i, j=j: self.selectedpion(i,j))
+            else:
+                self.tableau[i][j].config(bg='blue3',command = lambda i=i, j=j: self.selectedpion(i,j))
+        self.tableau[ancieni][ancienj].config(bg='white',command = lambda:self.inutile())
 
      
         for i in range(len(self.tableau)):
             for j in range(len(self.tableau)):
                 if self.tableau[i][j].cget('bg') =='red' or self.tableau[i][j].cget('bg') =='blue':
-                    self.tableau[i][j].config(bg='white')
+                    self.tableau[i][j].config(bg='white',command = lambda:self.inutile())
       
         if self.joueur == 1:
             self.joueur = 2
@@ -108,7 +126,8 @@ class Jeu:
             self.joueur = 1
         self.label_joueur.config(text="Joueur: " + str(self.joueur))
 
+    def inutile(self):
+        return
 
-
-jeu = Jeu(8)
+jeu = Jeu(6)
 jeu.UI()
