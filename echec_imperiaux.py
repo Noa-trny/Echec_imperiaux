@@ -85,7 +85,21 @@ class Jeu:
                 if 0 <= ni < self.n and 0 <= nj < self.n:
             
                     if self.tableau[ni][nj].cget("bg") == 'brown':
-                        self.tableau[ni][nj].config(bg='white',command=lambda ancieni=i,ancienj=j,i=ni,j=nj: self.move(ancieni,ancienj,i,j))
+                        self.tableau[ni][nj].config(bg='white')
+                        k += 1
+                    else:
+                        break  
+                else:
+                    break 
+        for di, dj in directions:
+            k = 1
+            while True:
+                nancieni, nancienj = ancieni + k * di, ancienj + k * dj
+            
+                if 0 <= ni < self.n and 0 <= nj < self.n:
+            
+                    if self.tableau[nancieni][nancienj].cget("bg") == 'brown':
+                        self.tableau[nancieni][nancienj].config(bg='white')
                         k += 1
                     else:
                         break  
@@ -94,7 +108,7 @@ class Jeu:
         if  self.joueur == 1:
             self.joueur =2
         else:
-            self.joueur = 1          
+            self.joueur = 1
         
         
 
