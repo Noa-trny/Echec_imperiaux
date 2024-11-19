@@ -17,6 +17,8 @@ class Jeu:
     def __init__(self, n):
         self.n = n
         self.plateau = [] 
+        self.joueur1 = joueur([0,n-1], n**2 // 4)
+        self.joueur2 = joueur([n-1,0], n**2 // 4)
 
     def create_plateau(self):
         liste1 = []
@@ -50,50 +52,32 @@ class Jeu:
 
         return liste1
     
-
-
-    def move_reine(self, start, end):
-                start_x, start_y = start
-                end_x, end_y = end
-
-                if start_x == end_x or start_y == end_y or abs(start_x - end_x) == abs(start_y - end_y):
-                    step_x = (end_x - start_x) // max(1, abs(end_x - start_x))
-                    step_y = (end_y - start_y) // max(1, abs(end_y - start_y))
-
-                    x, y = start_x + step_x, start_y + step_y
-                    while (x, y) != (end_x, end_y):
-                        if self.plateau[x][y].cget('bg') != 'white':
-                            return False
-                        x += step_x
-                        y += step_y
-
-                    if self.plateau[end_x][end_y].cget('bg') == 'white':
-                        self.plateau[start_x][start_y].config(bg='white')
-                        self.plateau[end_x][end_y].config(bg='orange')
-                        return True
-                return False
-    
-    def move_pion(self, start, end):
-                start_x, start_y = start
-                end_x, end_y = end
-
-                if start_x == end_x and self.plateau[end_x][end_y].cget('bg') == 'white' and end_y == start_y + 1:
-                    self.plateau[start_x][start_y].config(bg='white')
-                    self.plateau[end_x][end_y].config(bg='orange')
-                    return True
-                return False
     
 
 
-    def deplacement(self):
-        pass
         
-    def pion_selectionne(self):
-        if joueur.type_pion1:
-            return joueur.type_pion1
-        return joueur.type_pion2
+    def selectedpion(self, i, j):
     
-    def nombre_pions(self):
+        self.tableau[i][j].config(bg='green')
+
+        
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        for di, dj in directions:
+            k = 1
+            while True:
+                ni, nj = i + k * di, j + k * dj
+            
+                if 0 <= ni < self.n and 0 <= nj < self.n:
+            
+                    if self.tableau[ni][nj].cget("bg") == 'white':
+                        self.tableau[ni][nj].config(bg='brown')
+                        k += 1
+                    else:
+                        break  
+                else:
+                    break 
+    
+    def nombre_pions(self,joueur):
         for i in range(self.n):
             for j in range(self.n):
                 if self.plateau[i][j].cget('bg') != 'white':
@@ -133,6 +117,7 @@ class Jeu:
         self.root.title("Game")
         self.create_plateau()
         self.root.mainloop()
+
 
 jeu = Jeu(10)
 jeu.UI()
