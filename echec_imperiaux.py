@@ -1,5 +1,5 @@
 import tkinter as tk
-
+from tkinter import messagebox
 
 class joueur:
     coordonnees_reine = []
@@ -49,6 +49,19 @@ class Jeu:
             liste1.append(liste2)
 
         return liste1
+
+    def deplacement(self):
+        pass
+
+    def possible(self):
+        pass
+
+    def again(self):
+        return True
+    
+    def est_gagnant(self):
+        if joueur.nbr_pions <= 3:
+            return True
 
     def UI(self):
         self.root = tk.Tk()
