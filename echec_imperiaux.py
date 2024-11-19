@@ -52,7 +52,14 @@ class Jeu:
 
         return liste1
     
-    
+    def UI(self):
+        self.root = tk.Tk()
+        self.root.title("Game")
+        self.label_joueur = tk.Label(self.root, text="Joueur 1")
+        self.label_joueur.grid(row=self.n, columnspan=self.n)
+        self.label_nbr_pions = tk.Label(self.root, text="Nombre de pions : " + str(self.joueur1.nbr_pions))
+        self.create_plateau()
+        self.root.mainloop()
 
 
         
@@ -116,13 +123,7 @@ class Jeu:
         if joueur.nbr_pions <= 3:
             return True
 
-    def UI(self):
-        self.root = tk.Tk()
-        self.root.title("Game")
-        self.label_joueur = tk.Label(self.root, text="Joueur 1")
-        self.label_joueur.grid(row=self.n, columnspan=self.n)
-        self.create_plateau()
-        self.root.mainloop()
+    
 
 
 jeu = Jeu(10)
