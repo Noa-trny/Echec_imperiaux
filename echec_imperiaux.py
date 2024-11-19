@@ -8,6 +8,7 @@ class Joueur:
 
 class Jeu:
     def __init__(self, n):
+        self.temp = 0
         self.n = n
         self.joueur = 1
         self.tableau = self.create_plateau()
@@ -63,32 +64,58 @@ class Jeu:
             return True
         else:
             return False
+    def deselect_pion(self):
+        """Désélectionne le pion actif et réinitialise les cases disponibles pour le joueur courant."""
+        for i in range(len(self.tableau)):
+            for j in range(len(self.tableau)):
+                # Réinitialise les cases disponibles pour le joueur actuel
+                if self.joueur == 1 and self.tableau[i][j].cget('bg') == 'red':
+                    self.tableau[i][j].config(bg='white', command=lambda: self.inutile())
+                elif self.joueur == 2 and self.tableau[i][j].cget('bg') == 'blue':
+                    self.tableau[i][j].config(bg='white', command=lambda: self.inutile())
+                
+                # Réinitialise le pion actif
+                if self.tableau[i][j].cget('bg') in ['darkorange4', 'purple4', 'red3', 'blue4']:
+                    if self.joueur == 1 and self.tableau[i][j].cget('bg') == 'darkorange4':
+                        self.tableau[i][j].config(bg='darkorange2')
+                    elif self.joueur == 1:
+                        self.tableau[i][j].config(bg='red3')
+                    elif self.joueur == 2 and self.tableau[i][j].cget('bg') == 'purple4':
+                        self.tableau[i][j].config(bg='purple2')
+                    else:
+                        self.tableau[i][j].config(bg='blue3')
+        self.temp = 0  # Réinitialise l'état temporaire
 
     def selectedpion(self, i, j):
-        
-        if self.possible(i,j):
+   
+    
+        # Désélectionne le pion actif s'il y en a un
+        if self.temp >= 1:
+            self.deselect_pion()
+
+        # Vérifie si le pion sélectionné est valide
+        if self.possible(i, j):
+            self.temp += 1  # Marque un pion comme sélectionné
             if self.joueur == 1:
-                if self.tableau[i][j].cget('bg')== "darkorange2":
+                if self.tableau[i][j].cget('bg') == "darkorange2":
                     self.tableau[i][j].config(bg='darkorange4')
-                    directions = [(-1, 0),(-1,-1), (1, 0), (1,1),(1,-1),(-1,1),(0, -1), (0, 1)]
+                    directions = [(-1, 0), (-1, -1), (1, 0), (1, 1), (1, -1), (-1, 1), (0, -1), (0, 1)]
                 else:
                     self.tableau[i][j].config(bg='red3')
                     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
             else:
-                if self.tableau[i][j].cget('bg')== "purple2":
+                if self.tableau[i][j].cget('bg') == "purple2":
                     self.tableau[i][j].config(bg='purple4')
-                    directions = [(-1, 0),(-1,-1) ,(1, 0), (1,1),(1,-1),(-1,1),(0, -1), (0, 1)]
+                    directions = [(-1, 0), (-1, -1), (1, 0), (1, 1), (1, -1), (-1, 1), (0, -1), (0, 1)]
                 else:
-
                     self.tableau[i][j].config(bg='blue4')
                     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
-            
+            # Active les cases possibles pour le mouvement
             for di, dj in directions:
                 k = 1
                 while True:
                     ni, nj = i + k * di, j + k * dj
-                
                     if 0 <= ni < self.n and 0 <= nj < self.n:
                         if self.tableau[ni][nj].cget("bg") == 'white':
                             if self.joueur == 1:
@@ -97,9 +124,43 @@ class Jeu:
                                 self.tableau[ni][nj].config(bg='blue', command=lambda ancieni=i, ancienj=j, i=ni, j=nj: self.move(ancieni, ancienj, i, j))
                             k += 1
                         else:
-                            break  
+                            break
                     else:
-                        break 
+                        break
+
+        if self.possible(i, j):
+            self.temp += 1 
+            if self.joueur == 1:
+                if self.tableau[i][j].cget('bg') == "darkorange2":
+                    self.tableau[i][j].config(bg='darkorange4')
+                    directions = [(-1, 0), (-1, -1), (1, 0), (1, 1), (1, -1), (-1, 1), (0, -1), (0, 1)]
+                else:
+                    self.tableau[i][j].config(bg='red3')
+                    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+            else:
+                if self.tableau[i][j].cget('bg') == "purple2":
+                    self.tableau[i][j].config(bg='purple4')
+                    directions = [(-1, 0), (-1, -1), (1, 0), (1, 1), (1, -1), (-1, 1), (0, -1), (0, 1)]
+                else:
+                    self.tableau[i][j].config(bg='blue4')
+                    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+
+            for di, dj in directions:
+                k = 1
+                while True:
+                    ni, nj = i + k * di, j + k * dj
+                    if 0 <= ni < self.n and 0 <= nj < self.n:
+                        if self.tableau[ni][nj].cget("bg") == 'white':
+                            if self.joueur == 1:
+                                self.tableau[ni][nj].config(bg='red', command=lambda ancieni=i, ancienj=j, i=ni, j=nj: self.move(ancieni, ancienj, i, j))
+                            else:
+                                self.tableau[ni][nj].config(bg='blue', command=lambda ancieni=i, ancienj=j, i=ni, j=nj: self.move(ancieni, ancienj, i, j))
+                            k += 1
+                        else:
+                            break
+                    else:
+                        break
 
     def move(self, ancieni, ancienj, i, j):
         if self.joueur == 1:
@@ -125,7 +186,7 @@ class Jeu:
         else:
             self.joueur = 1
         self.label_joueur.config(text="Joueur: " + str(self.joueur))
-
+        self.temp -= 1
     def inutile(self):
         return
 
