@@ -1,9 +1,10 @@
 import tkinter as tk
 
 class Jeu:
-    def __init__(self, n):
+    def __init__(self, n,joueur):
         self.n = n
         self.tableau = self.create_plateau()
+        self.joueur = joueur
         
     def create_plateau(self):
         self.root = tk.Tk()
@@ -42,8 +43,9 @@ class Jeu:
         self.root.title("Game")
         self.tableau
 
-        self.label_joueur = tk.Label(self.root, text="Joueur 1")
+        self.label_joueur = tk.Label(self.root, text="Joueur: " + str(self.joueur))
         self.label_joueur.grid(row=self.n, columnspan=self.n)
+        
         self.root.mainloop()
 
     def selectedpion(self, i, j):
@@ -69,7 +71,11 @@ class Jeu:
 
     def move(self,ancieni,ancienj,i,j):
         self.tableau[ancieni][ancienj].config(bg='white')
-        self.tableau[i][j].config(bg='red')
+        if self.joueur ==1:
+            self.tableau[i][j].config(bg='red')
+        else:
+            self.tableau[i][j].config(bg='blue')
+
         directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
         for di, dj in directions:
             k = 1
@@ -85,10 +91,13 @@ class Jeu:
                         break  
                 else:
                     break 
-
+        if  self.joueur == 1:
+            self.joueur =2
+        else:
+            self.joueur = 1          
         
         
 
-jeu = Jeu(8)
+jeu = Jeu(8,1)
 jeu.UI()
 
