@@ -10,6 +10,11 @@ class joueur:
     def __init__(self, coordonnees_reine, nbr_pions):
         self.coordonnees_reine = coordonnees_reine
         self.nbr_pions = nbr_pions
+    
+    def deplacer_reine(self, i, j):
+        self.coordonnees_reine = [i, j]
+
+    
 
 
 
@@ -83,6 +88,25 @@ class Jeu:
                         break  
                 else:
                     break 
+
+    def move(self,ancieni,ancienj,i,j):
+        self.tableau[ancieni][ancienj].config(bg='white')
+        self.tableau[i][j].config(bg='red')
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        for di, dj in directions:
+            k = 1
+            while True:
+                ni, nj = i + k * di, j + k * dj
+            
+                if 0 <= ni < self.n and 0 <= nj < self.n:
+            
+                    if self.tableau[ni][nj].cget("bg") == 'brown':
+                        self.tableau[ni][nj].config(bg='white',command=lambda ancieni=i,ancienj=j,i=ni,j=nj: self.move(ancieni,ancienj,i,j))
+                        k += 1
+                    else:
+                        break  
+                else:
+                    break 
     
     def nombre_pions(self,joueur):
         for i in range(self.n):
@@ -93,21 +117,6 @@ class Jeu:
     
 
 
-    def deplacement_possibles(self):
-        if joueur.type_pion1:
-            def possible_reine(start):
-                start_x, start_y = start
-                for i in range(self.n):
-                    for j in range(self.n):
-                        if self.move_reine(start, (i, j)):
-                            return True
-                return False
-        if joueur.type_pion2:
-            def possible_pion(start):
-                start_x, start_y = start
-                if self.move_pion(start, (start_x + 1, start_y)):
-                    return True
-                return False
 
     def update(self):
         pass
