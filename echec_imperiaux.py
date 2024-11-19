@@ -4,18 +4,12 @@ from tkinter import messagebox
 class joueur:
     coordonnees_reine = []
     nbr_pions = 0
-    type_pion1 = "reine"
-    type_pion2 = "pion"
 
     def __init__(self, coordonnees_reine, nbr_pions):
         self.coordonnees_reine = coordonnees_reine
         self.nbr_pions = nbr_pions
     
-    def deplacer_reine(self, i, j):
-        self.coordonnees_reine = [i, j]
-
     
-
 
 
 class Jeu:
@@ -91,7 +85,7 @@ class Jeu:
 
     def move(self,ancieni,ancienj,i,j):
         self.tableau[ancieni][ancienj].config(bg='white')
-        self.tableau[i][j].config(bg='red')
+        self.tableau[i][j].config(bg='red' or 'blue')
         directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
         for di, dj in directions:
             k = 1
@@ -108,12 +102,32 @@ class Jeu:
                 else:
                     break 
     
+    def reine_move(self,ancieni,ancienj,i,j):
+        self.tableau[ancieni][ancienj].config(bg='white')
+        self.tableau[i][j].config(bg='purple' or 'orange')
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
+        for di, dj in directions:
+            k = 1
+            while True:
+                ni, nj = i + k * di, j + k * dj
+            
+                if 0 <= ni < self.n and 0 <= nj < self.n:
+            
+                    if self.tableau[ni][nj].cget("bg") == 'brown':
+                        self.tableau[ni][nj].config(bg='white',command=lambda ancieni=i,ancienj=j,i=ni,j=nj: self.reine_move(ancieni,ancienj,i,j))
+                        k += 1
+                    else:
+                        break  
+                else:
+                    break
+
     def nombre_pions(self,joueur):
         for i in range(self.n):
             for j in range(self.n):
                 if self.plateau[i][j].cget('bg') != 'white':
                     joueur.nbr_pions += 1
         return joueur.nbr_pions
+    
     
 
 
@@ -129,7 +143,7 @@ class Jeu:
         return True
     
     def est_gagnant(self):
-        if joueur.nbr_pions <= 3:
+        if joueur.nbr_pions <= 2:
             return True
 
     
