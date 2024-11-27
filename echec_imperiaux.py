@@ -189,7 +189,6 @@ class Jeu:
 
     def UI(self):
         """Lance l'interface graphique."""
-        self.choisir_taille_plateau()
         self.tableau = self.create_plateau()
         self.root.mainloop()
 
