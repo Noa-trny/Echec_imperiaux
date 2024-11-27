@@ -108,6 +108,10 @@ class Jeu:
 
         if self.tableau[ancieni][ancienj].cget('bg') in ['darkorange4', 'purple4']:
             self.tableau[i][j].config(bg=couleur['reine'], command=lambda i=i, j=j: self.selectedpion(i, j))
+            if self.joueur == 1:
+                self.joueur1.coordonnees_reine =[i,j]
+            else:
+                self.joueur2.coordonnees_reine = [i,j]
         else:
             self.tableau[i][j].config(bg=couleur['pion'], command=lambda i=i, j=j: self.selectedpion(i, j))
 
