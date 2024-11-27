@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import simpledialog
 
 class Joueur:
     def __init__(self, coordonnees_reine, nbr_pions):
@@ -15,13 +16,13 @@ class Jeu:
         self.n = n
         self.temp = 0
         self.joueur = 1
-        self.tableau = self.create_plateau()
+        self.tableau = None
+        self.root = tk.Tk()
         self.joueur1 = Joueur([0, n], n**2 // 4)
         self.joueur2 = Joueur([n, 0], n**2 // 4)
 
     def create_plateau(self):
-        self.root = tk.Tk()
-        self.root.title("Jeu")
+        """Crée le plateau de jeu en fonction de la taille donnée."""
         tableau = []
 
         for i in range(self.n):
@@ -123,10 +124,28 @@ class Jeu:
         """Commande par défaut pour les cases inutiles."""
         return
 
+    def choisir_taille_plateau(self):
+        """Panneau pour choisir la taille du plateau."""
+        boucle = False
+        while boucle == False:
+            self.root.withdraw()
+            taille = simpledialog.askinteger(
+                "Taille du Plateau",
+                "Entrez la taille du plateau (nombre pair, entre 6 et 12 comrpis.) :",
+                minvalue=6, maxvalue=12
+            )
+            if taille and taille % 2 == 0:
+                self.n = taille
+                boucle = True
+            
+            self.root.deiconify()
+
     def UI(self):
         """Lance l'interface graphique."""
+        self.choisir_taille_plateau()
+        self.tableau = self.create_plateau()
         self.root.mainloop()
 
-# Lance le jeu avec un plateau de taille 6x6
+# Lance le jeu avec un panneau d'affichage pour choisir la taille
 jeu = Jeu(6)
 jeu.UI()
