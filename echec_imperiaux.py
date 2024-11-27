@@ -49,9 +49,9 @@ class Jeu:
             for j in range(self.n):
                 if j >= self.n // 2:
                     if i == 0 and j == self.n-1:
-                        btn = tk.Button(self.root, bg="darkorange2", width=4, height=2, command=lambda i=i, j=j: self.selectedpion(i,j))
+                        btn = tk.Button(self.root, bg="darkorange2", width=4, height=2, command=lambda i=i, j=j: self.selectedpion(i, j))
                     else:
-                        btn = tk.Button(self.root, bg="red3", width=4, height=2, command=lambda i=i, j=j: self.selectedpion(i,j))
+                        btn = tk.Button(self.root, bg="red3", width=4, height=2, command=lambda i=i, j=j: self.selectedpion(i, j))
                 else:
                     btn = tk.Button(self.root, bg="white", width=4, height=2)
                 btn.grid(row=i, column=j)
@@ -63,9 +63,9 @@ class Jeu:
             for j in range(self.n):
                 if j < self.n // 2:
                     if i == self.n - 1 and j == 0:
-                        btn = tk.Button(self.root, bg="purple2", width=4, height=2, command=lambda i=i, j=j: self.selectedpion(i,j))
+                        btn = tk.Button(self.root, bg="purple2", width=4, height=2, command=lambda i=i, j=j: self.selectedpion(i, j))
                     else:
-                        btn = tk.Button(self.root, bg="blue3", width=4, height=2, command=lambda i=i, j=j: self.selectedpion(i,j))
+                        btn = tk.Button(self.root, bg="blue3", width=4, height=2, command=lambda i=i, j=j: self.selectedpion(i, j))
                 else:
                     btn = tk.Button(self.root, bg="white", width=4, height=2)
                 btn.grid(row=i, column=j)
@@ -90,10 +90,47 @@ class Jeu:
             return True
         else:
             return False
+<<<<<<< Updated upstream
+=======
+    def deselect_pion(self):
+        for i in range(len(self.tableau)):
+            for j in range(len(self.tableau)):
+                # Réinitialise les cases de déplacement
+                if self.tableau[i][j].cget('bg') in ['red', 'blue']:
+                    print(f"Réinitialisation de la case : ({i}, {j}), Couleur actuelle : {self.tableau[i][j].cget('bg')}")  # LOG
+                    self.tableau[i][j].config(bg='white', command=lambda: self.inutile())
+                
+                # Réinitialise les pions actifs
+                if self.tableau[i][j].cget('bg') in ['darkorange4', 'purple4']:
+                    print(f"Réinitialisation du pion actif : ({i}, {j}), Couleur actuelle : {self.tableau[i][j].cget('bg')}")  # LOG
+                    if self.joueur == 1:
+                        self.tableau[i][j].config(bg='darkorange2', command=lambda i=i, j=j: self.selectedpion(i, j))
+                    elif self.joueur == 2:
+                        self.tableau[i][j].config(bg='purple2', command=lambda i=i, j=j: self.selectedpion(i, j))
+                elif self.tableau[i][j].cget('bg') in ['red3', 'blue4']:
+                    if self.joueur == 1:
+                        self.tableau[i][j].config(bg='red3', command=lambda i=i, j=j: self.selectedpion(i, j))
+                    elif self.joueur == 2:
+                        self.tableau[i][j].config(bg='blue3', command=lambda i=i, j=j: self.selectedpion(i, j))
+        self.temp = 0  # Réinitialise l'état temporaire
+>>>>>>> Stashed changes
+
+
 
     def selectedpion(self, i, j):
         
+<<<<<<< Updated upstream
         if self.possible(i,j):
+=======
+        # Désélectionne le pion actif s'il y en a un
+        if self.temp >= 1:
+            self.deselect_pion()
+
+        # Vérifie si le pion sélectionné est valide
+        if self.possible(i, j):
+            self.temp += 1  # Marque un pion comme sélectionné 
+            print(f"Case sélectionnée : ({i}, {j}), Couleur : {self.tableau[i][j].cget('bg')}")  # LOG
+>>>>>>> Stashed changes
             if self.joueur == 1:
                 if self.tableau[i][j].cget('bg')== "darkorange2":
                     self.tableau[i][j].config(bg='darkorange4')
@@ -119,16 +156,31 @@ class Jeu:
                     if 0 <= ni < self.n and 0 <= nj < self.n:
                         if self.tableau[ni][nj].cget("bg") == 'white':
                             if self.joueur == 1:
-                                self.tableau[ni][nj].config(bg='red', command=lambda ancieni=i, ancienj=j, i=ni, j=nj: self.move(ancieni, ancienj, i, j))
-                            else:
-                                self.tableau[ni][nj].config(bg='blue', command=lambda ancieni=i, ancienj=j, i=ni, j=nj: self.move(ancieni, ancienj, i, j))
+                                self.tableau[ni][nj].config(
+                                    bg='red',
+                                    command=lambda ancieni=i, ancienj=j, ni=ni, nj=nj: self.move(ancieni, ancienj, ni, nj)
+                                )
+                            if self.joueur == 2:
+                                self.tableau[ni][nj].config(
+                                    bg='blue',
+                                    command=lambda ancieni=i, ancienj=j, ni=ni, nj=nj: self.move(ancieni, ancienj, ni, nj)
+                                )
+                            print(f"Case accessible : ({ni}, {nj}), Commande ajoutée.")  # LOG
                             k += 1
                         else:
                             break  
                     else:
+<<<<<<< Updated upstream
                         break 
+=======
+                        break
+
+
+>>>>>>> Stashed changes
 
     def move(self, ancieni, ancienj, i, j):
+        print(f"Déplacement de ({ancieni}, {ancienj}) vers ({i}, {j}).")  # LOG
+        print(f"Couleur de la case d'origine : {self.tableau[ancieni][ancienj].cget('bg')}, Couleur de la case destination : {self.tableau[i][j].cget('bg')}")  # LOG
         if self.joueur == 1:
             if self.tableau[ancieni][ancienj].cget('bg')== "darkorange4":
                     self.tableau[i][j].config(bg='darkorange2',command = lambda i=i, j=j: self.selectedpion(i,j))
@@ -144,7 +196,7 @@ class Jeu:
      
         for i in range(len(self.tableau)):
             for j in range(len(self.tableau)):
-                if self.tableau[i][j].cget('bg') =='red' or self.tableau[i][j].cget('bg') =='blue':
+                if self.tableau[i][j].cget('bg') =='red' or self.tableau[i][j].cget('bg') == 'blue':
                     self.tableau[i][j].config(bg='white',command = lambda:self.inutile())
       
         if self.joueur == 1:
