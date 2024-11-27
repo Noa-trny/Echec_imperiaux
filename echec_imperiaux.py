@@ -131,24 +131,24 @@ class Jeu:
         couleur_adverse = self.COULEURS[2 if self.joueur == 1 else 1]
         reine = self.joueur1.coordonnees_reine if self.joueur == 1 else self.joueur2.coordonnees_reine
 
-        print(f"Vérification de prise pour la reine en {reine} et le pion en ({i}, {j})")
+        # print(f"Vérification de prise pour la reine en {reine} et le pion en ({i}, {j})")
 
         if i != reine[0] and j != reine[1]:
             rect_sommets = [(reine[0], j), (i, reine[1])]
             for x, y in rect_sommets:
-                print(f"Vérification de la case ({x}, {y})...")
+                # print(f"Vérification de la case ({x}, {y})...")
                 if 0 <= x < self.n and 0 <= y < self.n:
                     bg_color = self.tableau[x][y].cget('bg')
                     # print(f"Couleur de la case : {bg_color}")
                     if bg_color == couleur_adverse['pion']:
-                        print(f"Pion capturé en ({x}, {y})")
+                        # print(f"Pion capturé en ({x}, {y})")
                         self.tableau[x][y].config(bg='white', command=self.inutile)
                         if self.joueur == 1:
                             self.joueur2.nbr_pions -= 1
                         else:
                             self.joueur1.nbr_pions -= 1
-        else:
-            print("Pas de prise possible")
+        # else:
+            # print("Pas de prise possible")
         self.gagne()
 
     def gagne(self):
