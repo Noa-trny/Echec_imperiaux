@@ -120,6 +120,23 @@ class Jeu:
         couleur = self.COULEURS[self.joueur]
         return self.tableau[i][j].cget('bg') in [couleur['pion'], couleur['reine']]
 
+    def prise(self, i, j):
+        """Capture les pions adverses si possible."""
+        couleur_adverse = self.COULEURS[2 if self.joueur == 1 else 1]
+        reine = self.joueur1.coordonnees_reine if self.joueur == 1 else self.joueur2.coordonnees_reine
+
+        if i != reine[0] and j != reine[1]:
+            rect_sommets = [(reine[0], j), (i, reine[1])]
+            for x, y in rect_sommets:
+                if 0 <= x < self.n and 0 <= y < self.n and self.tableau[x][y].cget('bg') == couleur_adverse['pion']:
+                    self.tableau[x][y].config(bg='white', command=self.inutile)
+                    if self.joueur == 1:
+                        self.joueur2.nbr_pions -= 1
+                    else:
+                        self.joueur1.nbr_pions -= 1
+
+    
+
     def inutile(self):
         """Commande par défaut pour les cases inutiles."""
         return
