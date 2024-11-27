@@ -193,6 +193,7 @@ class Jeu:
                 self.tableau[i][j].config(bg='blue3',command = lambda i=i, j=j: self.selectedpion(i,j))
         self.tableau[ancieni][ancienj].config(bg='white',command = lambda:self.inutile())
 
+<<<<<<< Updated upstream
      
         for i in range(len(self.tableau)):
             for j in range(len(self.tableau)):
@@ -205,6 +206,44 @@ class Jeu:
             self.joueur = 1
         self.label_joueur.config(text="Joueur: " + str(self.joueur))
 
+=======
+        self.tableau[ancieni][ancienj].config(bg='white', command=self.inutile)
+        self.deselect_pion()
+        self.prise(i, j)
+        self.joueur = 2 if self.joueur == 1 else 1
+        self.label_joueur.config(text="Joueur: " + str(self.joueur))
+
+    def possible(self, i, j):
+        """Vérifie si un pion peut être sélectionné."""
+        couleur = self.COULEURS[self.joueur]
+        return self.tableau[i][j].cget('bg') in [couleur['pion'], couleur['reine']]
+
+        
+    def prise(self, i, j):
+        """Capture les pions adverses si possible."""
+        couleur_adverse = self.COULEURS[2 if self.joueur == 1 else 1]
+        reine = self.joueur1.coordonnees_reine if self.joueur == 1 else self.joueur2.coordonnees_reine
+
+        if i != reine[0] and j != reine[1]:
+            rect_sommets = [(reine[0], j), (i, reine[1])]
+            for x, y in rect_sommets:
+                if 0 <= x < self.n and 0 <= y < self.n and self.tableau[x][y].cget('bg') == couleur_adverse['pion']:
+                    self.tableau[x][y].config(bg='white', command=self.inutile)
+                    if self.joueur == 1:
+                        self.joueur2.nbr_pions -= 1
+                    else:
+                        self.joueur1.nbr_pions -= 1
+        
+    def gagne(self):
+        """Vérifie si un joueur a gagné."""
+        if self.joueur1.nbr_pions == 2:
+            return self.joueur1, "a gagné"
+        elif self.joueur2.nbr_pions == 2:
+            return self.joueur2, "a gagné"
+        return None
+
+
+>>>>>>> Stashed changes
     def inutile(self):
         return
 
