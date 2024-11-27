@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import simpledialog
+import tkinter.messagebox as messagebox
 
 class Joueur:
     def __init__(self, coordonnees_reine, nbr_pions):
@@ -18,8 +19,8 @@ class Jeu:
         self.joueur = 1
         self.tableau = None
         self.root = tk.Tk()
-        self.joueur1 = Joueur([0, n], n**2 // 4)
-        self.joueur2 = Joueur([n, 0], n**2 // 4)
+        self.joueur1 = Joueur([0, n-1], n**2 // 4)
+        self.joueur2 = Joueur([n-1, 0], n**2 // 4)
 
     def create_plateau(self):
         """Crée le plateau de jeu en fonction de la taille donnée."""
@@ -125,21 +126,37 @@ class Jeu:
         couleur_adverse = self.COULEURS[2 if self.joueur == 1 else 1]
         reine = self.joueur1.coordonnees_reine if self.joueur == 1 else self.joueur2.coordonnees_reine
 
+        # print(f"Vérification de prise pour la reine en {reine} et le pion en ({i}, {j})")
+
         if i != reine[0] and j != reine[1]:
             rect_sommets = [(reine[0], j), (i, reine[1])]
             for x, y in rect_sommets:
-                if 0 <= x < self.n and 0 <= y < self.n and self.tableau[x][y].cget('bg') == couleur_adverse['pion']:
-                    self.tableau[x][y].config(bg='white', command=self.inutile)
-                    if self.joueur == 1:
-                        self.joueur2.nbr_pions -= 1
-                    else:
-                        self.joueur1.nbr_pions -= 1
+                # print(f"Vérification de la case ({x}, {y})...")
+                if 0 <= x < self.n and 0 <= y < self.n:
+                    bg_color = self.tableau[x][y].cget('bg')
+                    # print(f"Couleur de la case : {bg_color}")
+                    if bg_color == couleur_adverse['pion']:
+                        # print(f"Pion capturé en ({x}, {y})")
+                        self.tableau[x][y].config(bg='white', command=self.inutile)
+                        if self.joueur == 1:
+                            self.joueur2.nbr_pions -= 1
+                        else:
+                            self.joueur1.nbr_pions -= 1
+        # else:
+            # print("Pas de prise possible")
+        self.gagne()
 
     def gagne(self):
-        """Vérifie si un joueur a gagné."""
-        if self.joueur1.nbr_pions == 2:
+        """Vérifie si un joueur a gagné et affiche une popup."""
+        if self.joueur1.nbr_pions <= 2:
+            gagnant = "Joueur 1"
+            messagebox.showinfo("Fin de la partie", f"Le {gagnant} a gagné la partie ! 🎉")
+            self.root.destroy()  # Ferme l'application après l'affichage
             return self.joueur1, "a gagné"
-        elif self.joueur2.nbr_pions == 2:
+        elif self.joueur2.nbr_pions <= 2:
+            gagnant = "Joueur 2"
+            messagebox.showinfo("Fin de la partie", f"Le {gagnant} a gagné la partie ! 🎉")
+            self.root.destroy()  # Ferme l'application après l'affichage
             return self.joueur2, "a gagné"
         return None
     
