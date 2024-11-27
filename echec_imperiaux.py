@@ -111,7 +111,7 @@ class Jeu:
 
         self.tableau[ancieni][ancienj].config(bg='white', command=self.inutile)
         self.deselect_pion()
-
+        self.prise(i, j)
         self.joueur = 2 if self.joueur == 1 else 1
         self.label_joueur.config(text="Joueur: " + str(self.joueur))
 
@@ -135,6 +135,13 @@ class Jeu:
                     else:
                         self.joueur1.nbr_pions -= 1
 
+    def gagne(self):
+        """Vérifie si un joueur a gagné."""
+        if self.joueur1.nbr_pions == 2:
+            return self.joueur1, "a gagné"
+        elif self.joueur2.nbr_pions == 2:
+            return self.joueur2, "a gagné"
+        return None
     
 
     def inutile(self):
