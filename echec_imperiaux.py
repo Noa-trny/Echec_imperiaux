@@ -176,7 +176,11 @@ class Jeu:
                 "Entrez la taille du plateau (nombre pair, entre 6 et 12 comrpis.) :",
                 minvalue=6, maxvalue=12
             )
-            if not taille or taille % 2 != 0:
+            if taille is None: 
+                messagebox.showinfo("Quitter", "Vous avez annulé le jeu. Fermeture...")
+                self.root.destroy() 
+                exit()  
+            if taille % 2 != 0:
                 messagebox.showerror("Erreur", "Veuillez entrer un nombre pair entre 6 et 12.")
                 continue
             else:
