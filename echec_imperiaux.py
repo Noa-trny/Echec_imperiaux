@@ -13,14 +13,15 @@ class Jeu:
         2: {'pion': 'blue3', 'reine': 'purple2', 'case': 'blue'}
     }
 
-    def __init__(self, n):
-        self.n = n
+    def __init__(self):
+        self.root = tk.Tk()
+        self.n = self.choisir_taille_plateau()
         self.temp = 0
         self.joueur = 1
         self.tableau = None
-        self.root = tk.Tk()
-        self.joueur1 = Joueur([0, n-1], n**2 // 4)
-        self.joueur2 = Joueur([n-1, 0], n**2 // 4)
+        
+        self.joueur1 = Joueur([0, self.n-1], self.n**2 // 4)
+        self.joueur2 = Joueur([self.n-1, 0], self.n**2 // 4)
 
     def create_plateau(self):
         """Crée le plateau de jeu en fonction de la taille donnée."""
@@ -149,12 +150,12 @@ class Jeu:
     def gagne(self):
         """Vérifie si un joueur a gagné et affiche une popup."""
         if self.joueur1.nbr_pions <= 2:
-            gagnant = "Joueur 1"
+            gagnant = "Joueur 2"
             messagebox.showinfo("Fin de la partie", f"Le {gagnant} a gagné la partie ! 🎉")
             self.root.destroy()  # Ferme l'application après l'affichage
             return self.joueur1, "a gagné"
         elif self.joueur2.nbr_pions <= 2:
-            gagnant = "Joueur 2"
+            gagnant = "Joueur 1"
             messagebox.showinfo("Fin de la partie", f"Le {gagnant} a gagné la partie ! 🎉")
             self.root.destroy()  # Ferme l'application après l'affichage
             return self.joueur2, "a gagné"
@@ -175,11 +176,16 @@ class Jeu:
                 "Entrez la taille du plateau (nombre pair, entre 6 et 12 comrpis.) :",
                 minvalue=6, maxvalue=12
             )
-            if taille and taille % 2 == 0:
+            if not taille or taille % 2 != 0:
+                messagebox.showerror("Erreur", "Veuillez entrer un nombre pair entre 6 et 12.")
+                continue
+            else:
                 self.n = taille
                 boucle = True
-            
             self.root.deiconify()
+            print("j'ai choisit la taille")
+            return self.n 
+            
 
     def UI(self):
         """Lance l'interface graphique."""
@@ -188,5 +194,5 @@ class Jeu:
         self.root.mainloop()
 
 # Lance le jeu avec un panneau d'affichage pour choisir la taille
-jeu = Jeu(6)
+jeu = Jeu()
 jeu.UI()
