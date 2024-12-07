@@ -17,7 +17,7 @@ class Jeu:
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
-        self.son_deplacement = pygame.mixer.Sound("deplacement.wav")  # Assurez-vous d'avoir un fichier "deplacement.wav" dans le même répertoire
+        self.son_deplacement = pygame.mixer.Sound("deplacement.wav")
         self.root = tk.Tk()
         self.n = self.choisir_taille_plateau()
         self.temp = 0
@@ -51,7 +51,6 @@ class Jeu:
                 row.append(btn)
             tableau.append(row)
 
-        # Affichage du joueur actif et du nombre de pions
         self.label_joueur = tk.Label(self.root, text=f"Joueur: {self.joueur} - Pions: {self.joueur1.nbr_pions}")
         self.label_joueur.grid(row=self.n, columnspan=self.n)
         
@@ -158,12 +157,12 @@ class Jeu:
         if self.joueur1.nbr_pions <= 2:
             gagnant = "Joueur 2"
             messagebox.showinfo("Fin de la partie", f"Le {gagnant} a gagné la partie ! 🎉")
-            self.root.destroy()  # Ferme l'application après l'affichage
+            self.root.destroy()
             return self.joueur1, "a gagné"
         elif self.joueur2.nbr_pions <= 2:
             gagnant = "Joueur 1"
             messagebox.showinfo("Fin de la partie", f"Le {gagnant} a gagné la partie ! 🎉")
-            self.root.destroy()  # Ferme l'application après l'affichage
+            self.root.destroy()
             return self.joueur2, "a gagné"
         return None
     
