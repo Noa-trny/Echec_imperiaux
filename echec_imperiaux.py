@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import simpledialog
 import tkinter.messagebox as messagebox
+import pygame
 
 class Joueur:
     def __init__(self, coordonnees_reine, nbr_pions):
@@ -14,6 +15,9 @@ class Jeu:
     }
 
     def __init__(self):
+        pygame.init()
+        pygame.mixer.init()
+        self.son_deplacement = pygame.mixer.Sound("deplacement.wav")  # Assurez-vous d'avoir un fichier "deplacement.wav" dans le même répertoire
         self.root = tk.Tk()
         self.n = self.choisir_taille_plateau()
         self.temp = 0
@@ -120,6 +124,11 @@ class Jeu:
         self.prise(i, j)
         self.joueur = 2 if self.joueur == 1 else 1
         self.label_joueur.config(text=f"Joueur: {self.joueur} - Pions: {self.joueur1.nbr_pions if self.joueur == 1 else self.joueur2.nbr_pions}")
+        self.jouer_son_deplacement()
+
+    def jouer_son_deplacement(self):
+        """Joue un son lors du déplacement d'un pion."""
+        self.son_deplacement.play()
 
     def possible(self, i, j):
         """Vérifie si un pion peut être sélectionné."""
