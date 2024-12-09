@@ -45,7 +45,7 @@ class Jeu:
                 else:
                     bg = 'white'
 
-                btn = tk.Button(self.root, bg=bg, width=4, height=2,
+                btn = tk.Button(self.root, bg=bg, width=6, height=3,
                                 command=lambda i=i, j=j: self.selectedpion(i, j))
                 btn.grid(row=i, column=j)
                 row.append(btn)
